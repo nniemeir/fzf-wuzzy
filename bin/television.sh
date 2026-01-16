@@ -15,8 +15,8 @@ source $SCRIPT_DIR/common.sh || {
 depends fzf
 depends mpv
 
-if [ ! -d "$SHOWS_PATH" ]; then
-    echo "Error: Shows directory not found: $SHOWS_PATH"
+if [ ! -d "$TELEVISION_PATH" ]; then
+    echo "Error: Television directory not found: $TELEVISION_PATH"
     exit 1
 fi
 
@@ -24,7 +24,7 @@ prompt_season() {
 	clear
 	local show_selection="$1"
 	local seasons
-	seasons=$(find "$SHOWS_PATH/$show_selection" -mindepth 1 -maxdepth 1 -type d | sort | sed "s|$SHOWS_PATH/$show_selection/||")
+	seasons=$(find "$TELEVISION_PATH/$show_selection" -mindepth 1 -maxdepth 1 -type d | sort | sed "s|$TELEVISION_PATH/$show_selection/||")
 	local season_selection
 	season_selection=$(echo "$seasons" | fzf $FZF_DEFAULT_OPTS)
 	if [ -z "$season_selection" ]; then
@@ -40,7 +40,7 @@ prompt_episode() {
 	while true; do
 		clear
 		local episode_files
-		episode_files=$(find "$SHOWS_PATH/$show_selection/$season_selection" -type f \( -name "*.mkv" -o -name "*.mp4" \) | sort)
+		episode_files=$(find "$TELEVISION_PATH/$show_selection/$season_selection" -type f \( -name "*.mkv" -o -name "*.mp4" \) | sort)
 		local episode_selection
 		episode_selection=$(echo "$episode_files" | fzf $FZF_DEFAULT_OPTS)
 		if [ -z "$episode_selection" ]; then
@@ -52,8 +52,8 @@ prompt_episode() {
 }
 
 main() {
-    local shows=$(find "$SHOWS_PATH" -mindepth 1 -maxdepth 1 -type d | sort | sed "s|$SHOWS_PATH/||")
-    local show_selection=$(echo "$shows" | fzf $FZF_DEFAULT_OPTS)
+    local television=$(find "$TELEVISION_PATH" -mindepth 1 -maxdepth 1 -type d | sort | sed "s|$TELEVISION_PATH/||")
+    local show_selection=$(echo "$television" | fzf $FZF_DEFAULT_OPTS)
     if [ -z "$show_selection" ]; then
         exit 0
     else

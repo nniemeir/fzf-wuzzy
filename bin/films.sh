@@ -15,14 +15,14 @@ source $SCRIPT_DIR/common.sh || {
 depends fzf
 depends mpv
 
-if [ ! -d "$MOVIES_PATH" ]; then
-    echo "Error: Movies directory not found: $MOVIES_PATH"
+if [ ! -d "$FILMS_PATH" ]; then
+    echo "Error: Films directory not found: $FILMS_PATH"
     exit 1
 fi
 
 finished=false
 while [ "$finished" = "false" ]; do
-    film_files=$(find "$MOVIES_PATH" -type f \( -name "*.mkv" -o -name "*.mp4" \) | sort)
+    film_files=$(find "$FILMS_PATH" -type f \( -name "*.mkv" -o -name "*.mp4" \) | sort)
     selection=$(echo "$film_files" | fzf $FZF_DEFAULT_OPTS)
     if [ -z "$selection" ]; then
         finished=true

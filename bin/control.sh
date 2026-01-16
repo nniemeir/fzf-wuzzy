@@ -81,7 +81,7 @@ case {} in
             echo "Displays all CSV, Markdown, and Text files in the users notes directory and its subdirectories, opens selection in Neovim"
             ;;
         "Overview")
-            echo "Shows system information"
+            echo "Television system information"
             ;;
         "Power Off")
             echo "Shuts down the system via systemctl"
