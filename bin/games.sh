@@ -59,9 +59,9 @@ prompt_game() {
 			prompt_runner
 		else
 			local runner
-			runner=$(awk 'BEGIN { FS = ";" } /'"$game_selection"'/ { print $2 }' "$games_csv_path")
+			runner=$(awk 'BEGIN { FS = ";" } /'"$game_selection"'/ { print $2 }' "$GAMES_FILE")
 			local game_id
-			game_id=$(awk 'BEGIN { FS = ";" } /'"$game_selection"'/ { print $3 }' "$games_csv_path")
+			game_id=$(awk 'BEGIN { FS = ";" } /'"$game_selection"'/ { print $3 }' "$GAMES_FILE")
 			launch_game "$runner" "$game_id"
 		fi
 	done
@@ -128,7 +128,7 @@ get_matching_games() {
 				}
 			}
 		}
-	}' "$games_csv_path")
+	}' "$GAMES_FILE")
 
 	echo "$runner_games"
 }
