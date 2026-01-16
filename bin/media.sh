@@ -17,18 +17,18 @@ choice=$(echo -e "Books\nFilms\nGames\nMusic\nTelevision" | fzf $FZF_DEFAULT_OPT
 
 case "$choice" in 
         "Books")
-            ~/.dotfiles/Files/Linux/fzf/books.sh
+            $(cd "$(dirname "$0")" && pwd)/books.sh
             ;;
         "Films")
-            ~/.dotfiles/Files/Linux/fzf/films.sh
+            $(cd "$(dirname "$0")" && pwd)/films.sh
             ;;
         "Games")
-            ~/.dotfiles/Files/Linux/fzf/games.sh
+            $(cd "$(dirname "$0")" && pwd)/games.sh
             ;;
         "Music")
-            ~/.dotfiles/Files/Linux/fzf/music.sh
+            $(cd "$(dirname "$0")" && pwd)/music.sh
             ;;
         "Television")
-            ~/.dotfiles/Files/Linux/fzf/television.sh
+            $(cd "$(dirname "$0")" && pwd)/television.sh
             ;;
 esac
