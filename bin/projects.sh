@@ -1,17 +1,24 @@
 #!/bin/sh
 
-source $(cd "$(dirname "$0")" && pwd)/../config/preferences.conf || {
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
+source $SCRIPT_DIR/../config/preferences.conf || {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $(cd "$(dirname "$0")" && pwd)/common.sh || {
+source $SCRIPT_DIR/common.sh || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
 
 depends fzf
 depends flatpak
+
+if [ ! -d "$PROJECTS_PATH" ]; then
+    echo "Error: Projects directory not found: $PROJECTS_PATH"
+    exit 1
+fi
 
 selection=$(ls "$PROJECTS_PATH" | fzf $FZF_DEFAULT_OPTS)	
 

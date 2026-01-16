@@ -1,11 +1,13 @@
 #!/bin/sh
 
-source $(cd "$(dirname "$0")" && pwd)/../config/preferences.conf || {
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
+source $SCRIPT_DIR/../config/preferences.conf || {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $(cd "$(dirname "$0")" && pwd)/common.sh || {
+source $SCRIPT_DIR/common.sh || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
@@ -79,7 +81,7 @@ case {} in
             echo "Displays all CSV, Markdown, and Text files in the users notes directory and its subdirectories, opens selection in Neovim"
             ;;
         "Overview")
-            $(cd "$(dirname "$0")" && pwd)/overview.sh
+            echo "Shows system information"
             ;;
         "Power Off")
             echo "Shuts down the system via systemctl"
@@ -100,7 +102,7 @@ case {} in
             echo "Opens a selection window for GTK and icon themes, selections are applied via gsettings"
             ;;
         "Wallpapers")
-            echo "Opens a selection window for wallpapers, selection is applied in ~/.dotfiles/Files/Linux/sway/styling.conf"
+            echo "Opens a selection window for wallpapers, selection is applied in SWAY_WALLPAPER_CONF_FILE"
             ;;
 esac
 '
@@ -111,62 +113,66 @@ case "$op" in
             pavucontrol
             ;;
         "Audio Output")
-            $(cd "$(dirname "$0")" && pwd)/audio_output.sh
+            $SCRIPT_DIR/audio_output.sh
             ;;
         "Bluetooth")
-            $(cd "$(dirname "$0")" && pwd)/bluetooth.sh
+            $SCRIPT_DIR/bluetooth.sh
             ;;
         "Bookmarks")
-            $(cd "$(dirname "$0")" && pwd)/bookmarks.sh
+            $SCRIPT_DIR/bookmarks.sh
             ;;
         "Color Picker")
             grim -g "$(slurp -p)" -t ppm - | magick - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy 
             ;;
         "Configuration Management")
-            $(cd "$(dirname "$0")" && pwd)/config.sh
+            $SCRIPT_DIR/config.sh
             ;; 
         "Kill Process")
-            $(cd "$(dirname "$0")" && pwd)/kill.sh
+            $SCRIPT_DIR/kill.sh
             ;;
          "Launch An Application")
-            $(cd "$(dirname "$0")" && pwd)/launcher.sh
+            $SCRIPT_DIR/launcher.sh
             ;;
          "Lock")
 	        swaylock -i ~/Pictures/Wallpapers/dark_morning.jpg --color=282a36  --indicator-radius=100 --indicator-thickness=10 --inside-color=282a36 --inside-clear-color=282a36 --inside-ver-color=282a36 --inside-wrong-color=282a36 --key-hl-color=bd93f9aa --bs-hl-color=ff5555aa --ring-color=44475a90 --ring-ver-color=bd93f9 --ring-clear-color=ff79c611 --line-color=282a36 --line-uses-ring --ring-wrong-color=ff5555 	
             ;;
         "Manual Pages")
-            $(cd "$(dirname "$0")" && pwd)/man.sh
+            $SCRIPT_DIR/man.sh
             ;;
         "Media")
-            $(cd "$(dirname "$0")" && pwd)/media.sh
+            $SCRIPT_DIR/media.sh
             ;;
         "Merrin System Monitor")
             ~/.local/bin/merrin
             ;;
         "Notes")
-            $(cd "$(dirname "$0")" && pwd)/notes.sh
+            $SCRIPT_DIR/notes.sh
+            ;;
+        "Overview")
+            $SCRIPT_DIR/overview.sh
+            read -p "Press any key to continue..."
             ;;
         "Power Off")
             shutdown now
             ;;
         "Projects")
-            $(cd "$(dirname "$0")" && pwd)/projects.sh
+            $SCRIPT_DIR/projects.sh
             sleep 1
             ;;
         "Reboot")
             reboot
             ;;
          "Screenshot")
-            $(cd "$(dirname "$0")" && pwd)/grim.sh
+            $SCRIPT_DIR/grim.sh
             ;;
         "Suspend")
             systemctl $op
             ;;
          "Themes")
-            $(cd "$(dirname "$0")" && pwd)/themes.sh
+            $SCRIPT_DIR/themes.sh
             ;;
         "Wallpapers")
-            $(cd "$(dirname "$0")" && pwd)/wallpapers.sh
+            $SCRIPT_DIR/wallpapers.sh
             ;;
 esac
 

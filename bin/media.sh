@@ -1,11 +1,13 @@
 #!/bin/sh
 
-source $(cd "$(dirname "$0")" && pwd)/../config/preferences.conf || {
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
+source $SCRIPT_DIR/../config/preferences.conf || {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $(cd "$(dirname "$0")" && pwd)/common.sh || {
+source $SCRIPT_DIR/common.sh || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
@@ -17,18 +19,18 @@ choice=$(echo -e "Books\nFilms\nGames\nMusic\nTelevision" | fzf $FZF_DEFAULT_OPT
 
 case "$choice" in 
         "Books")
-            $(cd "$(dirname "$0")" && pwd)/books.sh
+            $SCRIPT_DIR/books.sh
             ;;
         "Films")
-            $(cd "$(dirname "$0")" && pwd)/films.sh
+            $SCRIPT_DIR/films.sh
             ;;
         "Games")
-            $(cd "$(dirname "$0")" && pwd)/games.sh
+            $SCRIPT_DIR/games.sh
             ;;
         "Music")
-            $(cd "$(dirname "$0")" && pwd)/music.sh
+            $SCRIPT_DIR/music.sh
             ;;
         "Television")
-            $(cd "$(dirname "$0")" && pwd)/television.sh
+            $SCRIPT_DIR/television.sh
             ;;
 esac

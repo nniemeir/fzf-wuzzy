@@ -1,17 +1,24 @@
 #!/bin/sh
 
-source $(cd "$(dirname "$0")" && pwd)/../config/preferences.conf || {
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
+source $SCRIPT_DIR/../config/preferences.conf || {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $(cd "$(dirname "$0")" && pwd)/common.sh || {
+source $SCRIPT_DIR/common.sh || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
 
 depends fzf
 depends mpv
+
+if [ ! -d "$SHOWS_PATH" ]; then
+    echo "Error: Shows directory not found: $SHOWS_PATH"
+    exit 1
+fi
 
 prompt_season() {
 	clear
@@ -30,8 +37,7 @@ prompt_season() {
 prompt_episode() {
 	local show_selection="$1"
 	local season_selection="$2"
-	local finished="0"
-	while [ $finished == "0" ]; do
+	while true; do
 		clear
 		local episode_files
 		episode_files=$(find "$SHOWS_PATH/$show_selection/$season_selection" -type f \( -name "*.mkv" -o -name "*.mp4" \) | sort)
