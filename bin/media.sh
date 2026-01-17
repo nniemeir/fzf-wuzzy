@@ -2,12 +2,12 @@
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
-source $SCRIPT_DIR/../config/preferences.conf || {
+. "$SCRIPT_DIR/../config/preferences.conf"|| {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $SCRIPT_DIR/common.sh || {
+. "$SCRIPT_DIR/common.sh" || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
@@ -15,22 +15,22 @@ source $SCRIPT_DIR/common.sh || {
 depends fzf
 
 # Construct the menu itself
-choice=$(echo -e "Books\nFilms\nGames\nMusic\nTelevision" | fzf $FZF_DEFAULT_OPTS --prompt="Select Category: ")
+choice=$(printf "Books\nFilms\nGames\nMusic\nTelevision" | fzf $FZF_DEFAULT_OPTS --prompt="Select Category: ")
 
 case "$choice" in 
         "Books")
-            $SCRIPT_DIR/books.sh
+            "$SCRIPT_DIR"/books.sh
             ;;
         "Films")
-            $SCRIPT_DIR/films.sh
+            "$SCRIPT_DIR"/films.sh
             ;;
         "Games")
-            $SCRIPT_DIR/games.sh
+            "$SCRIPT_DIR"/games.sh
             ;;
         "Music")
-            $SCRIPT_DIR/music.sh
+            "$SCRIPT_DIR"/music.sh
             ;;
         "Television")
-            $SCRIPT_DIR/television.sh
+            "$SCRIPT_DIR"/television.sh
             ;;
 esac

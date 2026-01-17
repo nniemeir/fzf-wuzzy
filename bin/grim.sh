@@ -2,12 +2,12 @@
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
-source $SCRIPT_DIR/../config/preferences.conf || {
+. "$SCRIPT_DIR/../config/preferences.conf"|| {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $SCRIPT_DIR/common.sh || {
+. "$SCRIPT_DIR/common.sh" || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
@@ -25,19 +25,19 @@ case "$choice" in
 	"Selected Area")
 	echo "Taking screenshot in 3 seconds..."
 	sleep 3
-	grim -g "$(slurp)" $SCREENSHOT_PATH/$file
+	grim -g "$(slurp)" "$SCREENSHOT_PATH"/"$file"
 	;;
 	"Whole Screen")
 	echo "Taking screenshot in 3 seconds..."
 	sleep 3
-	grim $SCREENSHOT_PATH/$file
+	grim "$SCREENSHOT_PATH"/"$file"
 	;;
 esac
 
 if [ -f "$SCREENSHOT_PATH/$file" ]; then
-	notify-send "Screenshot Saved" -i $SCREENSHOT_PATH/$file
+	notify-send "Screenshot Saved" -i "$SCREENSHOT_PATH"/"$file"
 fi
 
-if [ ! "$(ls $SCREENSHOT_PATH)" ]; then
+if [ ! "$(ls "$SCREENSHOT_PATH")" ]; then
 	rm -rf "$SCREENSHOT_PATH"
 fi

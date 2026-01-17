@@ -2,12 +2,12 @@
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
-source $SCRIPT_DIR/../config/preferences.conf || {
+. "$SCRIPT_DIR/../config/preferences.conf"|| {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $SCRIPT_DIR/common.sh || {
+. "$SCRIPT_DIR/common.sh" || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
@@ -20,7 +20,7 @@ if [ ! -d "$PROJECTS_PATH" ]; then
     exit 1
 fi
 
-selection=$(ls "$PROJECTS_PATH" | fzf $FZF_DEFAULT_OPTS)	
+selection=$(find "$PROJECTS_PATH" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | fzf $FZF_DEFAULT_OPTS)	
 
 if [ -z "$selection" ]; then
     exit 0

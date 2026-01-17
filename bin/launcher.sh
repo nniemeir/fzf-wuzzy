@@ -2,12 +2,12 @@
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
-source $SCRIPT_DIR/../config/preferences.conf || {
+. "$SCRIPT_DIR/../config/preferences.conf"|| {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $SCRIPT_DIR/common.sh || {
+. "$SCRIPT_DIR/common.sh" || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
@@ -23,7 +23,7 @@ list_flatpaks() {
 }
 
 list_gui_apps() {
-    grep -Rl "Type=Application" /usr/share/applications ~/.local/share/applications 2>/dev/null \
+    grep -Rl "Type=Application" /usr/share/applications "$HOME"/.local/share/applications 2>/dev/null \
         | xargs grep -L "NoDisplay=true" \
         | xargs grep "^Name=" \
         | sed 's/.*Name=//' \
@@ -41,7 +41,7 @@ if flatpak info "$choice" >/dev/null 2>&1; then
 fi
 
 # Otherwise, find it's desktop file and extract the exec command from it
-desktop_file=$(grep -Rl "Name=$choice" /usr/share/applications ~/.local/share/applications 2>/dev/null | head -n 1)
+desktop_file=$(grep -Rl "Name=$choice" /usr/share/applications "$HOME"/.local/share/applications 2>/dev/null | head -n 1)
 exec_cmd=$(grep "^Exec=" "$desktop_file" | sed 's/Exec=//' | sed 's/%.//g')
 
 # Execute in a subshell

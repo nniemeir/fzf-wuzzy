@@ -5,6 +5,7 @@ A collection of fzf scripts for common system tasks. Originally built with Sway 
 | Script | Description |
 |--------|-------------|
 | `audio_output.sh` | Switch between audio output devices |
+| `batch_convert.sh` | Convert between image formats using Magick |
 | `bluetooth.sh` | Connect/disconnect Bluetooth devices |
 | `bookmarks.sh` | Browse and open bookmarks from CSV in default browser |
 | `books.sh` | Browse and open ebooks (PDF/EPUB) in Zathura |
@@ -15,6 +16,7 @@ A collection of fzf scripts for common system tasks. Originally built with Sway 
 | `grim.sh` | Take screenshots (Wayland) |
 | `kill.sh` | Kill a running process |
 | `launcher.sh` | Launch GUI applications (like Rofi)|
+| `luks.sh` | Manage LUKS encrypted drives |
 | `man.sh` | Search and read manual pages |
 | `media.sh` | Hub for all media (books/films/music/TV/games) |
 | `music.sh` | Browse and play music with MPV |
@@ -34,6 +36,7 @@ A collection of fzf scripts for common system tasks. Originally built with Sway 
 * `sed` 
 * `bluetoothctl` - Bluetooth menu
 * `pactl`, `pavucontrol` - Audio control
+* `magick` - Image converting
 * `mpv` - Media playback
 * `zathura` - Document viewing
 * `grim`, `slurp` - Screenshots (Wayland)
@@ -64,10 +67,17 @@ bindsym $mod+r exec $term -e ~/.fzf-wuzzy/scripts/launcher.sh
 ```
 
 ## Bookmarks Configuration
-The `bookmarks.sh` script uses a CSV file to map bookmark names to their corresponding URLs. 
+The `bookmarks.sh` script uses a CSV file (config/bookmarks.csv) to map bookmark names to their corresponding URLs. 
 ```
 Title;Link
 Film | The Criterion Channel;https://www.criterionchannel.com/browse
+```
+
+## LUKS Drives Configuration
+The `luks.sh` script uses a CSV file (config/drives.csv) to map LVM logical volume names to their /dev/ entries and desired mountpoint. 
+```
+name;dev_entry;mountpoint
+games;sda1;/mnt/games
 ```
 
 ## Games Configuration

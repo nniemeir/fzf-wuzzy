@@ -1,18 +1,13 @@
 #!/bin/sh
 
-SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-
 SUPPORTED_RUNNERS="BlastEm\nbsnes\nDeSmuME\nDolphin\nFlycast\nHeroic\nLutris\nmGBA\nNestopia\nNone\nPCSX2\nPPSSPP\nRPCS3\nSteam"
 
 main() {
-	command -v fzf >/dev/null 2>&1 || {
-		echo >&2 "Error: fzf not found"
-		exit 1
-	}
+	SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
-    source $SCRIPT_DIR/../config/preferences.conf || {
-    	echo "Error: No configuration file found."
-    	exit 1
+	. "$SCRIPT_DIR/../config/preferences.conf"|| {
+		echo "Error: No configuration file found."
+		exit 1
 	}
 
 	if ! [ -f "$GAMES_FILE" ]; then
@@ -26,7 +21,8 @@ main() {
 }
 
 prompt_runner() {
-	while true; do
+	local finished="0"
+	while [ $finished == "0" ]; do
 		local available_runners
 		available_runners=$(get_available_runners)
 
@@ -39,7 +35,7 @@ prompt_runner() {
 			exit 0
 		fi
 
-		if [ "$runner_selection" = "All" ]; then
+		if [ "$runner_selection" == "All" ]; then
 			runner_selection=""
 		fi
 
@@ -52,7 +48,8 @@ prompt_runner() {
 
 prompt_game() {
 	local runner_games="$1"
-	while true; do
+	local finished="0"
+	while [ $finished == "0" ]; do
 		local game_selection
 		game_selection=$(echo -e "$runner_games" | fzf $FZF_DEFAULT_OPTS)
 		if [ -z "$game_selection" ]; then
@@ -114,8 +111,8 @@ get_available_runners() {
 get_matching_games() {
 	local runner_games
 	runner_games=$(awk -v filter="$runner_selection" -v available_runners="$available_runners" 'BEGIN { FS = ";" } {
-		if (NR = 1) { next }
-		if (filter = "") {
+		if (NR == 1) { next }
+		if (filter == "") {
 			if (index(available_runners, $2) > 0) {
 				print $1;
 			}
@@ -123,7 +120,7 @@ get_matching_games() {
 		else {
 			split(filter, runners, /\n/);
 			for (i in runners) {
-				if ($2 = runners[i]) {
+				if ($2 == runners[i]) {
 				print $1;
 				}
 			}

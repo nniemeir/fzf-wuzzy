@@ -2,12 +2,12 @@
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
-source $SCRIPT_DIR/../config/preferences.conf || {
+. "$SCRIPT_DIR/../config/preferences.conf"|| {
     echo "Error: No configuration file found."
     exit 1
 }
 
-source $SCRIPT_DIR/common.sh || {
+. "$SCRIPT_DIR/common.sh" || {
     echo "Error: common.sh missing from script directory"
     exit 1
 }
@@ -22,11 +22,11 @@ fi
 
 cd "$NOTE_PATH" || exit 1
 finished=false
-while [ $finished = "false" ]; do
+while [ "$finished" = "false" ]; do
 	note_files=$(find "$NOTE_PATH" -type f \( -iname "*.csv" -o -iname "*.md" -o -iname "*.tex" -o -iname "*.txt" \))
-    	selection=$(echo "$note_files" | sed "s|$NOTE_PATH||" | fzf $FZF_DEFAULT_OPTS --preview="cat -n {}" --preview-window=right:70%:wrap)	
+    	selection=$(echo "$note_files" | sed "s|$NOTE_PATH/||" | fzf $FZF_DEFAULT_OPTS --preview="cat -n {}" --preview-window=right:70%:wrap)	
 	if [ -z "$selection" ]; then
-		finished=false
+		finished=true
 	else
 		nvim "$NOTE_PATH/$selection"
 	fi
