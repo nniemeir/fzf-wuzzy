@@ -38,3 +38,5 @@ fi
 swaymsg output "*" bg "$WALLPAPER_PATH"/"$selection" fill &
 
 sed -i "s|bg .* fill|bg $WALLPAPER_PATH/$selection fill|" "$SWAY_WALLPAPER_CONF_FILE"
+
+notify-send "fzf-wuzzy 🐻 — Set Wallpaper" "$WALLPAPER_PATH/$selection"

@@ -35,4 +35,5 @@ sink_name=$(printf "%s" "$sinks_json" | jq -r --arg sink_pretty_name "$selection
 # Set the selected sink as default
 if [ -n "$sink_name" ]; then
     pactl set-default-sink "$sink_name"
+    notify-send "fzf-wuzzy 🐻 — Set Audio Output" "$selection"
 fi

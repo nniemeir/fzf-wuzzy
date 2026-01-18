@@ -64,3 +64,5 @@ sudo flatpak override --filesystem="$HOME"/.local/share/themes/
 sudo flatpak override --env=GTK_THEME="$theme"
 
 papirus-folders -t Papirus -C "$accent"
+
+notify-send "fzf-wuzzy 🐻 — Set Theme" "$theme"

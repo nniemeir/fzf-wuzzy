@@ -18,4 +18,5 @@ PID=$(ps -u "$USER" -o pid,comm | awk 'NR>1' | fzf $FZF_DEFAULT_OPTS --prompt="K
 
 if [ -n "$PID" ]; then
     kill -9 "$PID"
+    notify-send "fzf-wuzzy 🐻 — Terminated Process" "PID $PID"
 fi

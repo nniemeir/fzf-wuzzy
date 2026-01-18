@@ -21,30 +21,33 @@ if [ -z "$selection" ]; then
 	exit 0
 fi
 
-#TODO: This doesn't handle multi-word device names properly
 devices=$(bluetoothctl devices Paired | awk '{print $2, $3}')
 
 case "$selection" in 
 	"Connect")
-		name=$(printf "%s" "$devices" | awk '{print $2}' | fzf $FZF_DEFAULT_OPTS --prompt="Connect: ")
+		name=$(printf "%s" "$devices" | cut -d' ' -f2- | fzf $FZF_DEFAULT_OPTS --prompt="Connect: ")
 		
 		if [ -z "$name" ]; then
 			exit 0
 		fi
 
-		mac=$(printf "%s" "$devices" | grep "$name" | awk '{print $1}')
+		mac=$(printf "%s" "$devices" | grep "$name$" | awk '{print $1}')
 		
 		if [ -n "$mac" ]; then
 			bluetoothctl connect "$mac"
+			notify-send "fzf-wuzzy 🐻 — Bluetooth Management" "$name connected"
 		fi
 		;;
 	"Disconnect")
 		bluetoothctl disconnect
+		notify-send "fzf-wuzzy 🐻 — Bluetooth Management" "Device disconnected"
 		;;
 	"Power On")
 		bluetoothctl power on
+		notify-send "fzf-wuzzy 🐻 — Bluetooth Management" "Powered on Bluetooth adapter"
 		;;
 	"Power Off")
 		bluetoothctl power off
+		notify-send "fzf-wuzzy 🐻 — Bluetooth Management" "Powered off Bluetooth adapter"
 		;;
 esac

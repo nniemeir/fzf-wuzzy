@@ -39,7 +39,7 @@ case "$selection" in
 esac
 
 if [ -f "$SCREENSHOT_PATH/$file" ]; then
-	notify-send "Screenshot Saved" -i "$SCREENSHOT_PATH"/"$file"
+	notify-send "fzf-wuzzy 🐻 — Screenshot Saved" "Saved to $SCREENSHOT_PATH/$FILE"
 fi
 
 if [ ! "$(ls "$SCREENSHOT_PATH")" ]; then

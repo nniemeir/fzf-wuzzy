@@ -28,3 +28,4 @@ fi
 
 flatpak run com.visualstudio.code-oss "$PROJECTS_PATH/$selection" &
 
+notify-send "fzf-wuzzy 🐻 — Opened Project" "$PROJECTS_PATH/$selection"
