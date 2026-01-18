@@ -15,25 +15,52 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 depends flatpak
 depends fzf
+depends gsettings
 depends papirus-folders
 
-accents="adwaita\nblack\nblue\nbluegrey\nbreeze\nbrown\ncarmine\ncyan\ndarkcyan\ndeeporange\ngreen\ngrey\nindigo\nmagenta\nnordic\norange\npalebrown\npaleorange\npink\nred\nteal\nviolet\nwhite\nyaru\nyellow"
-theme=$(find "$HOME"/.local/share/themes/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | fzf $FZF_DEFAULT_OPTS)
+accents="adwaita
+black
+blue
+bluegrey
+breeze
+brown
+carmine
+cyan
+darkcyan
+deeporange
+green
+grey
+indigo
+magenta
+nordic
+orange
+palebrown
+paleorange
+pink
+red
+teal
+violet
+white
+yaru
+yellow"
 
-if [ -n "$theme" ]; then
-	accent=$(printf "%s" "$accents" | fzf $FZF_DEFAULT_OPTS)
-else
+theme=$(find "$HOME"/.local/share/themes/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort | fzf $FZF_DEFAULT_OPTS)
+
+if [ -z "$theme" ]; then
 	exit 0
 fi
 
-if [ -n "$accent" ]; then
-	gsettings set org.gnome.desktop.wm.preferences theme "$theme"
-	gsettings set org.gnome.desktop.interface gtk-theme "$theme"
-	gsettings set org.gnome.desktop.interface icon-theme "Papirus"
-	sudo flatpak override --filesystem="$HOME"/.local/share/themes/
-	sudo flatpak override --env=GTK_THEME="$theme"
-	papirus-folders -t Papirus -C "$accent"
-else
+accent=$(printf "%s" "$accents" | fzf $FZF_DEFAULT_OPTS)
+
+if [ -z "$accent" ]; then
 	exit 0
 fi
 
+gsettings set org.gnome.desktop.wm.preferences theme "$theme"
+gsettings set org.gnome.desktop.interface gtk-theme "$theme"
+gsettings set org.gnome.desktop.interface icon-theme "Papirus"
+
+sudo flatpak override --filesystem="$HOME"/.local/share/themes/
+sudo flatpak override --env=GTK_THEME="$theme"
+
+papirus-folders -t Papirus -C "$accent"

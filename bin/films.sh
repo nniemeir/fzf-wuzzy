@@ -20,13 +20,11 @@ if [ ! -d "$FILMS_PATH" ]; then
     exit 1
 fi
 
-finished=false
-while [ "$finished" = "false" ]; do
+while true; do
     film_files=$(find "$FILMS_PATH" -type f \( -name "*.mkv" -o -name "*.mp4" \) -printf "%f\n" | sort)
     selection=$(echo "$film_files" | fzf $FZF_DEFAULT_OPTS)
     if [ -z "$selection" ]; then
-        finished=true
-    else
-        mpv "$FILMS_PATH/$selection" --fullscreen >/dev/null 2>&1 &
+        break
     fi
+    mpv "$FILMS_PATH/$selection" --fullscreen >/dev/null 2>&1 &
 done

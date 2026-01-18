@@ -24,6 +24,7 @@ selection=$(find "$PROJECTS_PATH" -mindepth 1 -maxdepth 1 -type d -printf "%f\n"
 
 if [ -z "$selection" ]; then
     exit 0
-else
-    flatpak run com.visualstudio.code-oss "$PROJECTS_PATH/$selection"
 fi
+
+flatpak run com.visualstudio.code-oss "$PROJECTS_PATH/$selection" &
+

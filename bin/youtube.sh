@@ -11,19 +11,22 @@ depends fzf
 depends mpv
 depends yt-dlp
 
-finished=false
-while [ "$finished" = "false" ]; do
+while true; do
     printf "Enter a search query: "
     read -r query
 
     if [ -z "$query" ]; then
-        finished=true
-        continue
+        break
     fi
 
     results=$(yt-dlp --no-warnings "ytsearch10:$query" --print "%(title)s"$'\t'"%(webpage_url)s")
     selection=$(printf "%s" "$results" | awk -F '\t' '{print $1}' | fzf)
     url=$(printf "%s" "$results" | awk -F '\t' -v sel="$selection" '$1 == sel {print $2}')
+
+    if [ -z "$url" ]; then
+        echo "Error: No link found for '$selection'"
+        exit 1
+    fi
 
     mpv "$url"
 done

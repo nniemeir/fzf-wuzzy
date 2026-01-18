@@ -16,6 +16,10 @@ depends fzf
 
 mode=$(printf "Mount\nUnmount" | fzf $FZF_DEFAULT_OPTS)
 
+if [ -z "$mode" ]; then
+    exit 0
+fi
+
 name=$(awk -F ";" 'NR>1 {print $1}' "$DRIVES_PATH" | sort -u | fzf $FZF_DEFAULT_OPTS)
 
 if [ -z "$name" ]; then

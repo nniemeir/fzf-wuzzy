@@ -17,14 +17,20 @@ depends fzf
 depends jq
 depends pactl
 
+sinks_json=$(pactl -f json list sinks)
+
 # Create a list of sinks with pretty names
-options=$(pactl -f json list sinks | jq -r '.[] | .description')
+options=$(printf "%s" "$sinks_json" | jq -r '.[] | .description')
 
 # Let the user select a description
-selection=$(echo "$options" | fzf $FZF_DEFAULT_OPTS --prompt="Output:")
+selection=$(printf "%s" "$options" | fzf $FZF_DEFAULT_OPTS --prompt="Output:")
+
+if [ -z "$selection" ]; then
+    exit 0
+fi
 
 # Extract the corresponding sink name
-sink_name=$(pactl -f json list sinks | jq -r --arg sink_pretty_name "$selection" '.[] | select(.description == $sink_pretty_name) | .name')
+sink_name=$(printf "%s" "$sinks_json" | jq -r --arg sink_pretty_name "$selection" '.[] | select(.description == $sink_pretty_name) | .name')
 
 # Set the selected sink as default
 if [ -n "$sink_name" ]; then

@@ -20,6 +20,7 @@ depends pavucontrol
 list="Overview
 Audio Mixer
 Audio Output
+Batch Convert
 Bluetooth
 Bookmarks
 Color Picker
@@ -48,6 +49,9 @@ case {} in
             ;;
         'Audio Output')
             echo 'Allows the user to select an output device'
+            ;;
+        'Batch Convert')
+            echo 'Convert between image file formats with Magick'
             ;;
         'Bookmarks')
             echo 'Displays a list of bookmarks from \$HOME/.dotfiles/Files/Linux/bookmarks.csv and opens selection in default browser'
@@ -123,6 +127,9 @@ case "$op" in
         "Audio Output")
            "$SCRIPT_DIR"/audio_output.sh
             ;;
+        "Batch Convert")
+           "$SCRIPT_DIR"/batch_convert.sh
+            ;;
         "Bluetooth")
            "$SCRIPT_DIR"/bluetooth.sh
             ;;
@@ -130,7 +137,7 @@ case "$op" in
            "$SCRIPT_DIR"/bookmarks.sh
             ;;
         "Color Picker")
-            grim -g "$(slurp -p)" -t ppm - | magick - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy 
+            grim -g "$(slurp -p)" -t ppm - | magick - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
             ;;
         "Configuration Management")
            "$SCRIPT_DIR"/config.sh
@@ -142,7 +149,7 @@ case "$op" in
            "$SCRIPT_DIR"/launcher.sh
             ;;
          "Lock")
-	        swaylock -i "$HOME"/Pictures/Wallpapers/dark_morning.jpg --color=282a36  --indicator-radius=100 --indicator-thickness=10 --inside-color=282a36 --inside-clear-color=282a36 --inside-ver-color=282a36 --inside-wrong-color=282a36 --key-hl-color=bd93f9aa --bs-hl-color=ff5555aa --ring-color=44475a90 --ring-ver-color=bd93f9 --ring-clear-color=ff79c611 --line-color=282a36 --line-uses-ring --ring-wrong-color=ff5555 	
+	        swaylock 
             ;;
         "LUKS Drive Management")
             "$SCRIPT_DIR"/luks.sh
@@ -161,8 +168,6 @@ case "$op" in
             ;;
         "Overview")
            "$SCRIPT_DIR"/overview.sh
-            printf "\nPress any key to continue..."
-            read -r _
             ;;
         "Power Off")
             shutdown now
@@ -190,5 +195,3 @@ case "$op" in
             "$SCRIPT_DIR"/youtube.sh
             ;;
 esac
-
-exit 0

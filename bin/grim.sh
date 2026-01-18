@@ -19,18 +19,22 @@ mkdir -p "$SCREENSHOT_PATH"
 
 file=ps_$(date +"%Y%m%d%H%M%S").png
 
-choice=$(printf "Selected Area\nWhole Screen" | fzf $FZF_DEFAULT_OPTS --prompt="Screenshot > ")
+selection=$(printf "Selected Area\nWhole Screen" | fzf $FZF_DEFAULT_OPTS --prompt="Screenshot > ")
 
-case "$choice" in
+if [ -z "$selection" ]; then
+	exit 0
+fi
+
+case "$selection" in
 	"Selected Area")
-	echo "Taking screenshot in 3 seconds..."
-	sleep 3
-	grim -g "$(slurp)" "$SCREENSHOT_PATH"/"$file"
-	;;
+		echo "Taking screenshot in 3 seconds..."
+		sleep 3
+		grim -g "$(slurp)" "$SCREENSHOT_PATH"/"$file"
+		;;
 	"Whole Screen")
-	echo "Taking screenshot in 3 seconds..."
-	sleep 3
-	grim "$SCREENSHOT_PATH"/"$file"
+		echo "Taking screenshot in 3 seconds..."
+		sleep 3
+		grim "$SCREENSHOT_PATH"/"$file"
 	;;
 esac
 

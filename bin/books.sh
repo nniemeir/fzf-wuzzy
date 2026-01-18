@@ -20,12 +20,12 @@ if [ ! -d "$BOOKS_PATH" ]; then
     exit 1
 fi
 
-finished=false
-while [ "$finished" = "false" ]; do
-    selection=$(find "$BOOKS_PATH" -type f \( -name "*.epub" -o -name "*.pdf" \) | sort -u | fzf $FZF_DEFAULT_OPTS)
+while true; do
+    selection=$(find "$BOOKS_PATH" -type f \( -name "*.epub" -o -name "*.pdf" \) | sort | fzf $FZF_DEFAULT_OPTS)
+    
     if [ -z "$selection" ]; then
-        finished=true
-    else
-        zathura "$BOOKS_PATH/$selection".* 2>/dev/null &
+        break
     fi
+    
+    zathura "$BOOKS_PATH/$selection".* 2>/dev/null &
 done

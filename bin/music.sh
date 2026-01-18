@@ -21,13 +21,12 @@ if [ ! -d "$MUSIC_PATH" ]; then
 fi
 
 cd "$MUSIC_PATH" || exit 1
-finished=false
-while [ "$finished" = "false" ]; do
-	music_files=$(find "$MUSIC_PATH" -type f \( -iname "*.mp3" -o -iname "*.flac" -o -iname "*.ogg" \) | sort -u)
-    	selection=$(echo "$music_files" | sed "s|$MUSIC_PATH/||" | fzf $FZF_DEFAULT_OPTS --preview="ffprobe -v error -show_entries format_tags=,title,artist,album,genre,date -of default=noprint_wrappers=1 $MUSIC_PATH/{} | awk -F ':' '{print \$2}'" --preview-window=right:70%:wrap --prompt="Select Song: ")	
+
+while true; do
+	music_files=$(find "$MUSIC_PATH" -type f \( -iname "*.mp3" -o -iname "*.flac" -o -iname "*.ogg" \) | sort)
+	selection=$(echo "$music_files" | sed "s|$MUSIC_PATH/||" | fzf $FZF_DEFAULT_OPTS --preview="ffprobe -v error -show_entries format_tags=,title,artist,album,genre,date -of default=noprint_wrappers=1 $MUSIC_PATH/{} | awk -F ':' '{print \$2}'" --preview-window=right:70%:wrap --prompt="Select Song: ")	
 	if [ -z "$selection" ]; then
-		finished=true
-	else
-		mpv --msg-level=all=status --no-video "$MUSIC_PATH/$selection"
+		break
 	fi
+	mpv --msg-level=all=status --no-video "$MUSIC_PATH/$selection"
 done

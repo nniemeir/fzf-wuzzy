@@ -20,6 +20,16 @@ if [ ! -f "$BOOKMARKS_FILE" ]; then
 fi
 
 title=$(awk -F ";" 'NR>1 {print $1}' "$BOOKMARKS_FILE" | sort -u | fzf $FZF_DEFAULT_OPTS)
-if [ -z "$title" ]; then exit 0; fi
+
+if [ -z "$title" ]; then 
+    exit 0
+fi
+
 link=$(awk -F ";" -v t="$title" '$1 == t { print $2 }' "$BOOKMARKS_FILE")
+
+if [ -z "$link" ]; then
+    echo "Error: No link found for '$title'"
+    exit 1
+fi
+
 xdg-open "$link"

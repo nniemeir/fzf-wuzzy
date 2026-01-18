@@ -7,7 +7,11 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
     exit 1
 }
 
+depends bluetoothctl
+depends dnf
+depends flatpak
 depends fzf
+depends gsettings
 depends jq
 
 echo "$(whoami)@$(hostname)"
@@ -31,3 +35,6 @@ echo "Icons: $(gsettings get org.gnome.desktop.interface icon-theme | tr -d "'")
 echo "Shell: $SHELL"
 echo "Terminal: $TERM"
 echo "Active Bluetooth Device: $(bluetoothctl info | grep "Name" | awk -F ': ' '{print $2}')"
+
+printf "\nPress any key to continue..."
+read -r _

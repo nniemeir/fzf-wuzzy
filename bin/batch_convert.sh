@@ -17,8 +17,19 @@ if [ -z "$dir" ]; then
 	dir="./"
 fi
 
-formats=$(magick identify -list format | awk '$3 ~ /rw/ {print $1}' | tr -d \*)
+dir="${dir/#\~/$HOME}"
+
+formats=$(magick identify -list format | awk '$3 ~ /rw/ {print $1}' | tr -d \* | tr 'A-Z' 'a-z')
 input=$(printf "%s" "$formats" | fzf --prompt="Select input format: ")
+
+if [ -z "$input" ]; then
+    exit 0
+fi
+
 output=$(printf "%s" "$formats" | fzf --prompt="Select output format: ")
 
-find . -maxdepth 1 -wholename "$dir*.$input" -exec mogrify -format "$dir.$output" {} \;
+if [ -z "$output" ]; then
+    exit 0
+fi
+
+find "$dir" -maxdepth 1 -type f -iname "*.$input" -exec mogrify -format "$output" {} \;

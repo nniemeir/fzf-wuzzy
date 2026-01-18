@@ -20,5 +20,3 @@ manual=$(man -k . | sort -u | awk '{print $1, $2}' | fzf $FZF_DEFAULT_OPTS --pro
 if [ -n "$manual" ]; then
     man "$manual"
 fi
-
-exit 0

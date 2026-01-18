@@ -14,10 +14,13 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 depends fzf
 
-# Construct the menu itself
-choice=$(printf "Books\nFilms\nGames\nMusic\nTelevision" | fzf $FZF_DEFAULT_OPTS --prompt="Select Category: ")
+selection=$(printf "Books\nFilms\nGames\nMusic\nTelevision" | fzf $FZF_DEFAULT_OPTS --prompt="Select Category: ")
 
-case "$choice" in 
+if [ -z "$selection" ]; then
+    exit 0
+fi
+
+case "$selection" in 
         "Books")
             "$SCRIPT_DIR"/books.sh
             ;;

@@ -15,23 +15,36 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 depends bluetoothctl
 depends fzf
 
-choice=$(printf "Connect\nDisconnect\nPower On\nPower Off" | fzf $FZF_DEFAULT_OPTS --prompt="Bluetooth: " | cut -d. -f1)
+selection=$(printf "Connect\nDisconnect\nPower On\nPower Off" | fzf $FZF_DEFAULT_OPTS --prompt="Bluetooth: ")
 
-devices=$(bluetoothctl devices Paired | awk '{print $2, $3}')
-
-if [ "$choice" = "Connect" ]; then
-	name=$(echo "$devices" | awk '{print $2}' | fzf $FZF_DEFAULT_OPTS --prompt="Connect: ")
-	mac=$(echo "$devices" | grep "$name" | awk '{print $1}')
-	if [ -n "$mac" ]; then
-	   bluetoothctl connect "$mac"
-	fi
-elif [ "$choice" = "Disconnect" ]; then
-	bluetoothctl disconnect
-
-elif [ "$choice" = "Power On" ]; then
-	bluetoothctl power on
-
-elif [ "$choice" = "Power Off" ]; then
-	bluetoothctl power off
+if [ -z "$selection" ]; then
+	exit 0
 fi
 
+#TODO: This doesn't handle multi-word device names properly
+devices=$(bluetoothctl devices Paired | awk '{print $2, $3}')
+
+case "$selection" in 
+	"Connect")
+		name=$(printf "%s" "$devices" | awk '{print $2}' | fzf $FZF_DEFAULT_OPTS --prompt="Connect: ")
+		
+		if [ -z "$name" ]; then
+			exit 0
+		fi
+
+		mac=$(printf "%s" "$devices" | grep "$name" | awk '{print $1}')
+		
+		if [ -n "$mac" ]; then
+			bluetoothctl connect "$mac"
+		fi
+		;;
+	"Disconnect")
+		bluetoothctl disconnect
+		;;
+	"Power On")
+		bluetoothctl power on
+		;;
+	"Power Off")
+		bluetoothctl power off
+		;;
+esac

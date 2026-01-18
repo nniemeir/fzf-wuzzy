@@ -21,13 +21,12 @@ if [ ! -d "$NOTE_PATH" ]; then
 fi
 
 cd "$NOTE_PATH" || exit 1
-finished=false
-while [ "$finished" = "false" ]; do
+
+while true; do
 	note_files=$(find "$NOTE_PATH" -type f \( -iname "*.csv" -o -iname "*.md" -o -iname "*.tex" -o -iname "*.txt" \))
-    	selection=$(echo "$note_files" | sed "s|$NOTE_PATH/||" | fzf $FZF_DEFAULT_OPTS --preview="cat -n {}" --preview-window=right:70%:wrap)	
+	selection=$(echo "$note_files" | sort | sed "s|$NOTE_PATH/||" | fzf $FZF_DEFAULT_OPTS --preview="cat -n {}" --preview-window=right:70%:wrap)	
 	if [ -z "$selection" ]; then
-		finished=true
-	else
-		nvim "$NOTE_PATH/$selection"
+		break
 	fi
+	nvim "$NOTE_PATH/$selection"
 done

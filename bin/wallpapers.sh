@@ -13,6 +13,7 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 }
 
 depends fzf
+depends swaymsg
 
 if [ ! -d "$WALLPAPER_PATH" ]; then
     echo "Error: Wallpapers directory not found: $WALLPAPER_PATH"
@@ -30,9 +31,10 @@ esac
 
 selection=$(find "$WALLPAPER_PATH" -maxdepth 1 -type f -printf "%f\n" | sort | eval "$fzf_cmd")
 
-if [ -n "$selection" ]; then
-	swaymsg output "*" bg "$WALLPAPER_PATH"/"$selection" fill &
-	sed -i "s|bg .* fill|bg $WALLPAPER_PATH/$selection fill|" "$SWAY_WALLPAPER_CONF_FILE"
-else
-	exit 0
+if [ -z "$selection" ]; then
+    exit 0
 fi
+
+swaymsg output "*" bg "$WALLPAPER_PATH"/"$selection" fill &
+
+sed -i "s|bg .* fill|bg $WALLPAPER_PATH/$selection fill|" "$SWAY_WALLPAPER_CONF_FILE"
